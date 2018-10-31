@@ -1,64 +1,64 @@
 package XModule
 
 import (
-	"time"
-	"strings"
+	"glog-master"
 	"reflect"
-	"FenDZ/glog-master"
+	"strings"
+	"time"
 )
 
 type DModule interface {
-	Init(selfGetter DModuleGetter)bool
+	Init(selfGetter DModuleGetter) bool
 	Destroy()
 	Run(delta int64)
 }
 
 type implDModule struct {
-	module DModule
-	tickUseTime time.Duration
+	module        DModule
+	tickUseTime   time.Duration
 	tickTimeTotal time.Duration
-	moduleName string
+	moduleName    string
 }
 
-type DModuleMgr [] implDModule
+type DModuleMgr []implDModule
 
 type DModuleGetter struct {
 	mgr *DModuleMgr
-	id int
+	id  int
 }
 
 // NewDmodule ... ...
 func NewDmodule(num int) DModuleMgr {
-	return make([]implDModule,num)
+	return make([]implDModule, num)
 }
 
 // Get ... ...
-func (g *DModuleGetter)Get() DModule {
+func (g *DModuleGetter) Get() DModule {
 	return (*g.mgr)[g.id].module
 }
 
 //Register ... ...
-func  (mgr *DModuleMgr)Register(id int,m DModule) DModuleGetter {
-	  (*mgr)[id].module = m
-	  mName := strings.Replace(reflect.TypeOf(m).String(),"*","_",-1)
-	  mName = "module"+ strings.Replace(mName,".","_",-1)
-	  mName = strings.ToLower(mName)
-	 (*mgr)[id].moduleName = mName
-	 return mgr.Getter(id)
+func (mgr *DModuleMgr) Register(id int, m DModule) DModuleGetter {
+	(*mgr)[id].module = m
+	mName := strings.Replace(reflect.TypeOf(m).String(), "*", "_", -1)
+	mName = "module" + strings.Replace(mName, ".", "_", -1)
+	mName = strings.ToLower(mName)
+	(*mgr)[id].moduleName = mName
+	return mgr.Getter(id)
 }
 
 // Getter ... ...
-func (mgr *DModuleMgr)Getter(id int) DModuleGetter {
-	return DModuleGetter{mgr:mgr,id:id}
+func (mgr *DModuleMgr) Getter(id int) DModuleGetter {
+	return DModuleGetter{mgr: mgr, id: id}
 }
 
 // Init ... ...
-func (mgr *DModuleMgr)Init(id int) bool {
-	
-	if id<0||id >=len(*mgr){
+func (mgr *DModuleMgr) Init(id int) bool {
+
+	if id < 0 || id >= len(*mgr) {
 		return false
 	}
-	if !(*mgr)[id].module.Init(mgr.Getter(id)){
+	if !(*mgr)[id].module.Init(mgr.Getter(id)) {
 		return false
 	}
 	return true
@@ -73,7 +73,7 @@ func moduleRunOnce(m *implDModule, delta int64) {
 		m.tickTimeTotal += m.tickUseTime
 		if m.tickUseTime > 40*time.Millisecond &&
 			nowTime.UnixNano()/int64(time.Millisecond)%1000 <= 50 {
-				glog.Warning("module %s run time:%d", m.moduleName, m.tickUseTime)
+			glog.Warning("module %s run time:%d", m.moduleName, m.tickUseTime)
 		}
 	}
 }

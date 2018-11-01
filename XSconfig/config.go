@@ -11,5 +11,11 @@ type Config struct {
 
 // 获取配置文件
 func init() {
+	// 初始化数据操作
+}
 
+// 读取配置文件-- 加载配置文件数据
+func ReadDataCSV(strFileName string, strFilePath string) {
+
+	return
 }

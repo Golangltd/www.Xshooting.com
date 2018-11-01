@@ -25,3 +25,10 @@ func Connect() {
 	_ = lis
 	return
 }
+
+//Client: full demo
+
+//kcpconn, err := kcp.DialWithOptions("192.168.0.1:10000", nil, 10, 3)
+//Server: full demo
+
+//lis, err := kcp.ListenWithOptions(":10000", nil, 10, 3)

@@ -23,12 +23,13 @@ func Connect() {
 	}
 
 	_ = lis
+
 	return
 }
 
 //Client: full demo
-
+// 例子管理操作
 //kcpconn, err := kcp.DialWithOptions("192.168.0.1:10000", nil, 10, 3)
 //Server: full demo
-
+// 数据整理操作 服务器
 //lis, err := kcp.ListenWithOptions(":10000", nil, 10, 3)
